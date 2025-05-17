@@ -23,6 +23,8 @@ app.get("/", (req, res) => {
 // CREATE GET /health
 app.get("/health", (req, res) => {
   // Return JSON: { status: "ok" }
+  res.set('Content-Type', 'application/json');
+  res.send({status: "ok"})
 });
 
 // TASK 2: User Routes
@@ -33,22 +35,42 @@ const users = [
 
 app.get("/users", (req, res) => {
   // Return all users
+  res.json({users});
 });
 
 app.get("/users/:id", (req, res) => {
   // 1. Get ID from req.params
+  const userId = req.params.id;
   // 2. Find user in array
+  const user = users[userId-1];
   // 3. Return user or 404 if not found
+  if(user) {
+    res.json({user})
+  }
+  else {
+    res.status(404).json({message: "User ID Not Found"});
+  }
 });
 
 // TASK 3: Message Submission
 app.post("/messages", (req, res) => {
   // 1. Get text from req.body
+  const text = req.body;
   // 2. Validate text exists
+  if(text) {
+    res.json({
+      "id": "{generated-id-number}",
+      "text": "original-text",
+      "status": "received"
+    })
+  }
   // 3. Return JSON with:
   //    - Generated ID (number)
   //    - Original text
   //    - status: "received"
+  else {
+    res.status(404).json({message: "Error! What Did You Do Stupid?!"});
+  }
 });
 
 // ------------------------------------------------
