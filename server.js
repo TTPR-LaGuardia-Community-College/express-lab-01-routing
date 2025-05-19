@@ -57,17 +57,17 @@ app.post("/messages", (req, res) => {
   // 1. Get text from req.body
   const text = req.body;
   // 2. Validate text exists
-  if(text) {
-    res.json({
-      "id": "{generated-id-number}",
-      "text": "original-text",
-      "status": "received"
-    })
-  }
   // 3. Return JSON with:
   //    - Generated ID (number)
   //    - Original text
   //    - status: "received"
+  if(text) {
+    res.json(
+      "id:", text.id,
+      "text:", text.original-text,
+      "status:", text.received,
+    )
+  }
   else {
     res.status(404).json({message: "Error! What Did You Do Stupid?!"});
   }
