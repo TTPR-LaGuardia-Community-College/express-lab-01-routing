@@ -61,18 +61,17 @@ app.post("/messages", (req, res) => {
     res.status(400).json({error: "Text is required"});
   }
   // 3. Return JSON with:
+  const rng = Math.random();
   //    - Generated ID (number)
   //    - Original text
   //    - status: "received"
   if(text) {
-    res.json(
-      "id:", text.id,
-      "text:", text.original-text,
-      "status:", text.received,
-    )
-  }
-  else {
-    res.status(404).json({error: "Error! What Did You Do Stupid?!"});
+    res.status(201).json({
+      id: rng,
+      text: text.text,
+      status: 'received',
+    })
+  
   }
 });
 
