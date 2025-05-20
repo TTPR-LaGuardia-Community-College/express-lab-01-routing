@@ -5,6 +5,8 @@ const PORT = 3000;
 // Middleware: Enable JSON request body parsing
 app.use(express.json());
 
+
+
 // Basic logging middleware
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
@@ -22,8 +24,9 @@ app.get("/", (req, res) => {
 // Task 1: Health Check Endpoint
 // CREATE GET /health
 app.get("/health", (req, res) => {
-  // Return JSON: { status: "ok" }
+  res.json({ status: "ok" });
 });
+  // Return JSON: { status: "ok" }
 
 // TASK 2: User Routes
 const users = [
@@ -32,17 +35,38 @@ const users = [
 ];
 
 app.get("/users", (req, res) => {
-  // Return all users
+res.json(users);
 });
 
 app.get("/users/:id", (req, res) => {
+  const user = users.find(user => user.id === parseInt(req.params.id));
+
+if (!user) {
+  return res.status(404).json({ error: "User not found" }); 
+}
+res.json(user);
   // 1. Get ID from req.params
   // 2. Find user in array
   // 3. Return user or 404 if not found
 });
 
 // TASK 3: Message Submission
+
+let currentId = 1;
+
 app.post("/messages", (req, res) => {
+  const { text } = req.body;
+
+  if (!text) {
+    return res.status(400).json({ error: "Text is required" });
+  }
+
+  res.json({
+    id: currentId++, // Replaces with generated ID
+    text: text,
+    status: "received",
+  });
+
   // 1. Get text from req.body
   // 2. Validate text exists
   // 3. Return JSON with:
@@ -50,6 +74,8 @@ app.post("/messages", (req, res) => {
   //    - Original text
   //    - status: "received"
 });
+
+
 
 // ------------------------------------------------
 // END OF STUDENT TASKS
