@@ -1,4 +1,5 @@
 const express = require("express");
+const { get } = require("express/lib/response");
 const app = express();
 const PORT = 3000;
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 // CREATE GET /health
 app.get("/health", (req, res) => {
   // Return JSON: { status: "ok" }
+  res.send({ status: "ok" })
 });
 
 // TASK 2: User Routes
@@ -33,13 +35,22 @@ const users = [
 
 app.get("/users", (req, res) => {
   // Return all users
+  res.send(users)
 });
 
 app.get("/users/:id", (req, res) => {
   // 1. Get ID from req.params
   // 2. Find user in array
   // 3. Return user or 404 if not found
-});
+  const user = users.find(user => user.id === parseInt(req.params.id));
+
+if (!user) {
+  return res.status(404).json({ error: "User not found" }); 
+}
+res.json(user);
+})
+
+let currentId =1;
 
 // TASK 3: Message Submission
 app.post("/messages", (req, res) => {
@@ -49,6 +60,19 @@ app.post("/messages", (req, res) => {
   //    - Generated ID (number)
   //    - Original text
   //    - status: "received"
+
+
+  const { text } = req.body;
+
+  if (!text) {
+    return res.status(400).json({ error: "Text is required" });
+  }
+
+  res.json({
+    id: currentId++, 
+    text: text,
+    status: "received",
+  });
 });
 
 // ------------------------------------------------
