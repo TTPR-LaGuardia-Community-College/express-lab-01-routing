@@ -36,6 +36,7 @@ const users = [
 
 app.get("/users", (req, res) => {
   // Return all users
+  res.send(users);
 });
 
 app.get("/users/:id", (req, res) => {
