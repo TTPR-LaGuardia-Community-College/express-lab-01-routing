@@ -61,6 +61,16 @@ app.post("/messages", (req, res) => {
   //    - Generated ID (number)
   //    - Original text
   //    - status: "received"
+  if(!req.body.text) {
+    return res.status(400).send({
+      error: "Text is required"
+    });
+  }
+  res.status(201).send({
+    id: Math.floor(Math.random()) + 1,
+    text: req.body.text,
+    status: "received"
+  })
 });
 
 // ------------------------------------------------
