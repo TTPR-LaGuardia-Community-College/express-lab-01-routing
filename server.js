@@ -43,6 +43,14 @@ app.get("/users/:id", (req, res) => {
   // 1. Get ID from req.params
   // 2. Find user in array
   // 3. Return user or 404 if not found
+  const userId = Number(req.params.id);
+  const user = users.find(({id}) => id === userId);
+  if(!user) {
+    return res.status(404).send({
+      error: "User not found"
+    });
+  }
+  res.send(user);
 });
 
 // TASK 3: Message Submission
