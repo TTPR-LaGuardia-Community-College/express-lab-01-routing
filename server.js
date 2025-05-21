@@ -23,6 +23,9 @@ app.get("/", (req, res) => {
 // CREATE GET /health
 app.get("/health", (req, res) => {
   // Return JSON: { status: "ok" }
+  res.send({
+    status: "ok"
+  });
 });
 
 // TASK 2: User Routes
