@@ -22,6 +22,9 @@ app.get("/", (req, res) => {
 // Task 1: Health Check Endpoint
 // CREATE GET /health
 app.get("/health", (req, res) => {
+  res.send ({ 
+    status: "ok" 
+  });
   // Return JSON: { status: "ok" }
 });
 
@@ -31,26 +34,49 @@ const users = [
   { id: 2, name: "Bob" },
 ];
 
+// GET /users
 app.get("/users", (req, res) => {
-  // Return all users
+  res.send (users);
 });
 
 app.get("/users/:id", (req, res) => {
   // 1. Get ID from req.params
+  const userId = parseInt(req.params.id, 10);
   // 2. Find user in array
+  const user = users.find((u) => u.id === userId);
   // 3. Return user or 404 if not found
+  if (user) {
+    res.send(user);
+  } else {
+    res.status(404).send({ error: "User not found" });
+  }
 });
 
 // TASK 3: Message Submission
+
+let currentId = 1; // Initialize currentId here
 app.post("/messages", (req, res) => {
-  // 1. Get text from req.body
+   // 1. Get text from req.body
+  const { text } = req.body;
+ console.log("Received message:", text);
+
   // 2. Validate text exists
+   if (!text) {
+    return res.status(400).send({ error: "Text is required" });
+  }
+
   // 3. Return JSON with:
   //    - Generated ID (number)
   //    - Original text
   //    - status: "received"
-});
 
+  res.status(201).json({
+    id: currentId++,
+    text: text,
+    status: "received",
+  });
+
+});
 // ------------------------------------------------
 // END OF STUDENT TASKS
 
