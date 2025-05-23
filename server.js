@@ -21,8 +21,8 @@ app.get("/", (req, res) => {
 
 // Task 1: Health Check Endpoint
 // CREATE GET /health
-app.get("/health", (req, res) => {
-  // Return JSON: { status: "ok" }
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' }).status(200);
 });
 
 // TASK 2: User Routes
@@ -33,18 +33,49 @@ const users = [
 
 app.get("/users", (req, res) => {
   // Return all users
+  console.log(users);
+  res.json(users);
 });
 
 app.get("/users/:id", (req, res) => {
   // 1. Get ID from req.params
+  const userId = parseInt(req.params.id);
   // 2. Find user in array
+  const user = users.find(element => element.id === userId)
   // 3. Return user or 404 if not found
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).send({error: 'User not found'});
+  }
+
 });
 
 // TASK 3: Message Submission
 app.post("/messages", (req, res) => {
-  // 1. Get text from req.body
+  // 1. Get text from req.body {information} = form 
+      // username, address, zip, other information ==> {username, address, zip} = req.body
+      // do whatever with that info
+
+      const {text} = req.body
+      let counter = 1;
+
+      console.log(text)
+
   // 2. Validate text exists
+    if (!text || text.trim() === "") {
+      return res.status(400).json({ error: "Text is required" });
+    }
+
+  const message = {
+    // id
+    id: counter++,
+    // text
+    text: text,
+    // status = 'recieved'
+    status: 'received'
+  }
+  res.status(201).json(message)
   // 3. Return JSON with:
   //    - Generated ID (number)
   //    - Original text
