@@ -22,6 +22,7 @@ app.get("/", (req, res) => {
 // Task 1: Health Check Endpoint
 // CREATE GET /health
 app.get("/health", (req, res) => {
+  res.json({status:"ok"});
   // Return JSON: { status: "ok" }
 });
 
@@ -32,13 +33,26 @@ const users = [
 ];
 
 app.get("/users", (req, res) => {
+  res.json(users);
   // Return all users
 });
 
 app.get("/users/:id", (req, res) => {
-  // 1. Get ID from req.params
+  
+  // 1. Get ID from req.param
   // 2. Find user in array
   // 3. Return user or 404 if not found
+  const userID = parseInt(req.params.id);
+  const user = users.find(u=> u.id == userID);
+  if (user){
+    res.json(user);
+  }
+  else{
+    res.status(404).json({status:"Users not found!"});
+  }
+
+
+  
 });
 
 // TASK 3: Message Submission
@@ -49,6 +63,21 @@ app.post("/messages", (req, res) => {
   //    - Generated ID (number)
   //    - Original text
   //    - status: "received"
+  const {text} = req.body;
+  const num =(Math.floor(Math.random()*100)+1);
+  if (text){
+    const result ={
+      id: num,
+      message: text,
+      status:"received"
+    }
+    res.send(result);
+    
+  }
+  else{
+    res.status(404).json({status: "Messages not found!"});
+  
+  }
 });
 
 // ------------------------------------------------
